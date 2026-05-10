@@ -1,0 +1,107 @@
+{% extends "admin_blank.html" %}
+
+{% block content %}
+    <style>
+        .zone{
+            margin: 23px;
+        }
+        h1 {
+            color: #EB1616;
+            text-align: center;
+        }
+        .filter-form {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #EB1616;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        a.format {
+            color: #Eb1616;
+            text-decoration: none;
+        }
+        a.format:hover {
+            text-decoration: underline;
+        }
+        button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+
+    <div class = 'zone'>
+        <h1>Documentation List</h1>
+        
+        <div class="filter-form">
+            <form method="GET" action="{% url 'documentation_list' %}">
+                <label for="filter">Filter by Subject:</label>
+                <select id="filter" name="subject">
+                    <option value="">All Subjects</option>
+                    {% for subject in subjects %}
+                    <option value="{{ subject.id }}"{% if subject.id == request.GET.subject %} selected{% endif %}>{{ subject.name }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Filter</button>
+            </form>
+        </div>
+
+        <a class = 'format' href="{% url 'documentation_add' %}" style="display: inline-block; margin: 10px 0; padding: 10px; background-color: #EB1616; color: white; text-decoration: none; border-radius: 5px;">Add New Documentation</a>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>File</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for material in materials %}
+                <tr>
+                    <td>{{ material.description }}</td>
+                    <td><a class = 'format' href="{{ material.file.url }}" target="_blank">View</a></td>  <!-- Mở tài liệu trong tab mới -->
+                    <td>
+                        <a class = 'format' href="{% url 'documentation_edit' material.id %}">Edit</a>
+                        <form action="{% url 'documentation_delete' material.id %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3">No documents found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

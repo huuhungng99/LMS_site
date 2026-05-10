@@ -1,0 +1,62 @@
+{% extends "admin_blank.html" %}
+
+{% block content %}
+
+    <style>
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form.format {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #EB1616;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 100%;
+            margin-bottom: 10px; /* Space between buttons */
+        }
+        button:hover {
+            background-color: #EB1616;
+        }
+        .cancel-button {
+            background-color: #EB1616; /* Red color for cancel */
+        }
+        .cancel-button:hover {
+            background-color: #EB1616; /* Darker red on hover */
+        }
+
+    </style>
+
+    <h1 style="color: #EB1616">{% if form.instance.pk %}Edit Question{% else %}Add Question{% endif %}</h1>
+    <form class = 'format' method="post">
+        {% csrf_token %}
+        {{ form.as_p }}  <!-- Display form -->
+        <button type="submit">Save</button>
+        <button type="button" class="cancel-button" onclick="window.location.href='{% url 'question_list' %}'">Cancel</button>
+    </form>
+{% endblock %}
